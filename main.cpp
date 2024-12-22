@@ -1,34 +1,51 @@
+#include "lccv.h"
 #include "MJPEGWriter.h"
+#include "libcamera_app.h"
 
 using namespace std;
 using namespace cv;
+using namespace libcamera;
+
 
 int main()
 {
     MJPEG server(7777);
-    VideoCapture cap;
-    bool ok = cap.open(0);
-    if (!ok)
+
+    uint32_t num_cams = LibcameraApp::GetNumberCameras();
+    if (num_cams == 0)
     {
-        cerr << "No cam found" << endl;
+        std::cerr << "No cameras found." << std::endl;
         return 1;
     }
-    //cap.set(CV_CAP_PROP_FRAME_WIDTH, 1296);
-    //cap.set(CV_CAP_PROP_FRAME_HEIGHT, 972);
+
+    std::cout << "Found " << num_cams << " cameras." << std::endl;
+
+    uint32_t height = 3040;
+    uint32_t width = 4056;
+
+    /*uint32_t height = 480;
+    uint32_t width = 640;*/
+
+    lccv::PiCamera cam;
+    cam.options->video_width=width;
+    cam.options->video_height=height;
+    cam.options->framerate=30;
+    cam.options->verbose=true;
+    cam.startVideo();
+
     Mat frame;
-    cap >> frame;
+    cam.getVideoFrame(frame,1000);
 
     server.write(frame);
-    frame.release();
     server.start();
-    while (cap.isOpened())
+    while (cam.getVideoFrame(frame,1000))
     {
-        cap >> frame;
         server.write(frame);
-        frame.release();
         mySleep(40);
     }
     cout << "Camera shutdown" << endl;
+    frame.release();
+    cam.stopVideo();
     server.stop();
     return 0;
 }
