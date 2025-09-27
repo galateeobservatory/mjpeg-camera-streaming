@@ -1,6 +1,6 @@
-# MJPEG streamer
+# MJPEG Raspberry PI streamer
 
-Stream MJpeg from a camera to a web page.
+Stream MJpeg from raspberry pi camera to a web page.
 
 ---
 
@@ -30,3 +30,50 @@ make -j4
 ```
 
 The executable is named `MJPeg`.
+
+## Create systemd service
+
+Copy executable to `/opt`:
+
+```bash
+sudo mkdir /opt/mjpeg_streamer && sudo cp MJPeg /opt/mjpeg_streamer/
+```
+
+Add `mjpeg_streamer` user:
+
+```bash
+sudo useradd mjpeg_streamer
+sudo usermod -aG video mjpeg_streamer
+```
+
+Create a systemd service file `/etc/systemd/system/mjpeg-streamer.service`:
+
+```ini
+[Unit]
+Description=MJpeg HTTP camera streamer
+After=network-online.target
+
+[Service]
+Type=simple
+
+User=mjpeg_streamer
+Group=mjpeg_streamer
+UMask=007
+
+Type=simple
+ExecStart=/opt/mjpeg_streamer/MJPeg
+Restart=always
+TimeoutStopSec=300
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start the service:
+
+```bash
+sudo systemctl enable mjpeg-streamer.service
+sudo service mjpeg-streamer start
+```
+
+Now you can access the stream at `http://<raspberry_pi_ip>:7777`
