@@ -28,3 +28,5 @@ cd build
 cmake ..
 make -j4
 ```
+
+The executable is named `MJPeg`.
