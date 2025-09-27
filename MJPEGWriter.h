@@ -52,7 +52,7 @@ void mySleep(int sleepMs);
 class MJPEG
 {
 public:
-    MJPEG(int port = 0);
+    MJPEG(uint16_t port = 0);
 
     ~MJPEG();
 
@@ -79,7 +79,7 @@ private:
     std::thread *thread_listen, *thread_write;
     std::mutex mutex_writer, mutex_cout, mutex_client;
     cv::Mat lastFrame;
-    int port;
+    uint16_t port;
     const static unsigned short num_connections = 10;
 
     int _write(int sock, char *s, int len);

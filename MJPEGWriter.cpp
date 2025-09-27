@@ -2,7 +2,7 @@
 
 using namespace cv;
 
-MJPEG::MJPEG(int port) : sock(INVALID_SOCKET), timeout(200000), quality(20), port(port)
+MJPEG::MJPEG(uint16_t port) : sock(INVALID_SOCKET), timeout(200000), quality(20), port(port)
 {
 #ifndef WIN32
     signal(SIGPIPE, SIG_IGN);

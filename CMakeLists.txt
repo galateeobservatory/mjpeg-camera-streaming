@@ -10,4 +10,4 @@ add_executable(MJPeg main.cpp MJPEGWriter.cpp
         libcamera_app_options.h
         libcamera_app.h
         lccv.h)
-target_link_libraries(MJPeg -lpthread -lopencv_core -lopencv_videoio -lopencv_imgcodecs -lcamera -lcamera-base)
+target_link_libraries(MJPeg -lpthread -lopencv_core -lopencv_videoio -lopencv_imgcodecs -lcamera -lcamera-base -linih)
