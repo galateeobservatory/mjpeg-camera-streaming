@@ -220,7 +220,7 @@ struct FrameInfo
 		if (fom)
 			focus = *fom;
 
-		auto ae = ctrls.get(libcamera::controls::AeLocked);
+		auto ae = ctrls.get(libcamera::controls::AwbLocked);
 		if (ae)
 			aelock = *ae;
 	}
